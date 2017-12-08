@@ -74,20 +74,25 @@ def logout():
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
-    owner = User.query.filter_by(email=session['email']).first()
-    if request.method == 'POST':
-        task_name = request.form['task']
-        new_task = Task(task_name, owner)
-        db.session.add(new_task)
-        db.session.commit()
-        
-    tasks = Task.query.filter_by(completed=False, owner=owner).all()
-    completed_tasks = Task.query.filter_by(completed=True, owner=owner).all()
-    return render_template('todos.html', title="Get It Done!", tasks = tasks, completed_tasks = completed_tasks)
+    return redirect("/blog")
 
 @app.route("/blog", methods=['POST', 'GET'])
 def mainblog():
-    # this page should display all blog post
+    owner = User.query.filter_by(email=session['email']).first()
+    if request.method == 'POST':
+        blog_title = request.form['title']
+        blog_post = request.form['content']
+        new_blog = Blog(blog_title, blog_post, owner)
+        db.session.add()
+        db.session.commit()
+        
+    posts = Blog.query.filter_by(owner=owner).all()
+    return render_template('blog.html', title="Build-A-Blog", posts = posts)
+
+@app.route("/newpost", methods=['POST', 'GET'])
+def newpost():
+    # this page should display the form where you can enter a new post
+    return "Hey!"
 
 if __name__ == '__main__':
     app.run()

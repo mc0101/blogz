@@ -1,0 +1,26 @@
+{% extends "base.html "%}
+
+
+{% block content %}
+    <h1>Build-A-Blog</h1>
+    <form method='post'>
+        <label>
+            Title:
+            <input type="text" name="title" />
+        </label>
+        <label>Post:<input type='text' name='post' /></label>
+        <input type="submit" value="Create Post" />
+    </form>
+
+    <hr />
+
+    {% if posts|length == 0 %}
+    <p>No posts yet</p>
+    {% else %}
+    <h2>Previous Posts</h2>
+    <ul>
+        {% for post %}
+        <li>{{task.name}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
