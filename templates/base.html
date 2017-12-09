@@ -6,6 +6,12 @@
             .error {
                 color: red;
             }
+
+            textarea {
+                margin: 10px 0;
+                width: 540px;
+                height: 120px;
+            }
         </style>
     </head>
 <body>    
@@ -13,7 +19,7 @@
     <div>
         <a href='blog'>Main Page</a>
         <br>
-        <a href='newpost>'>New Post</a>
+        <a href='newpost'>New Post</a>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=True) %}
