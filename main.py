@@ -80,12 +80,16 @@ def index():
 def mainblog():
     owner = User.query.filter_by(email=session['email']).first()
     posts = Blog.query.filter_by(owner=owner).all()
-    id = request.args.get(Blog.id)
-    post = Blog.query.filter_by(id=id).first()
-    if request.method == 'GET' and id is not None:
-        return render_template('post.html', post=post)
+    if request.method == "GET" and 'id' in request.args:
+        id = request.args.get(Blog.id)
+        post = Blog.query.filter_by(id=id).first
+        return render_template('blog_post.html', post=post)
     else:
         return render_template('blog.html', title="Build-A-Blog", posts=posts)
+
+@app.route("/blog_post")
+def blog(id=id):
+    return render_template("blog_post.html", id=id)
 
 @app.route("/newpost", methods=['POST', 'GET'])
 def newpost():

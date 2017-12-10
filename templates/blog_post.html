@@ -3,8 +3,10 @@
 
 {% block content %}
     <h1>Build-A-Blog Post</h1>
-    {% for post in posts %}
+        {% if post.id = request.args('id)') %}
+        {% for post in post %}
         <h2>{{post.title}}</h2>{{post.body}} 
-    {% endfor %}
+        {% endfor %}
+        {% endif %}
 
 {% endblock %}
