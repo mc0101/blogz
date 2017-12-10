@@ -9,7 +9,7 @@
     <h2>Previous Posts</h2>
     
         {% for post in posts %}
-        <h4>{{post.title}}</h4>{{post.body}}
+        <h3><a href="/blog" + {{  post.id  }}>{{post.title}}</a></h3>{{post.body}}
         {% endfor %}
         {% endif %}
     

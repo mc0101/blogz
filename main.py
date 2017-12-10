@@ -80,8 +80,12 @@ def index():
 def mainblog():
     owner = User.query.filter_by(email=session['email']).first()
     posts = Blog.query.filter_by(owner=owner).all()
-    
-    return render_template('blog.html', title="Build-A-Blog", posts=posts)
+    id = request.args.get(Blog.id)
+    post = Blog.query.filter_by(id=id).first()
+    if request.method == 'GET' and id is not None:
+        return render_template('post.html', post=post)
+    else:
+        return render_template('blog.html', title="Build-A-Blog", posts=posts)
 
 @app.route("/newpost", methods=['POST', 'GET'])
 def newpost():
@@ -93,15 +97,10 @@ def newpost():
             new_blog = Blog(blog_title, blog_post, owner)
             db.session.add(new_blog)
             db.session.commit()
-            return redirect ("/post?id={0}".format(new_blog.id))
+            return redirect ("/blog?id={0}".format(new_blog.id))
         else:
             flash('Both the title and body need to have content.', 'error')
-    
     return render_template('newpost.html', title="New Post")
-
-@app.route("/post", methods=["POST", "GET"])
-def singlepost():
-    
 
 if __name__ == '__main__':
     app.run()
