@@ -76,20 +76,16 @@ def logout():
 def index():
     return redirect("/blog")
 
-@app.route("/blog", methods=['POST', 'GET'])
+@app.route("/blog")
 def mainblog():
     owner = User.query.filter_by(email=session['email']).first()
     posts = Blog.query.filter_by(owner=owner).all()
     if request.method == "GET" and 'id' in request.args:
-        id = request.args.get(Blog.id)
-        post = Blog.query.filter_by(id=id).first
-        return render_template('blog_post.html', post=post)
+        blogid = request.args.get("id")
+        blogpost = Blog.query.get(blogid)
+        return render_template('blog_post.html', blogpost=blogpost)
     else:
         return render_template('blog.html', title="Build-A-Blog", posts=posts)
-
-@app.route("/blog_post")
-def blog(id=id):
-    return render_template("blog_post.html", id=id)
 
 @app.route("/newpost", methods=['POST', 'GET'])
 def newpost():
