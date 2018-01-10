@@ -85,19 +85,43 @@ def logout():
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
-    return redirect("/blog")
+    users = User.query.all()
+    userId = request.args.get("owner_id")
+    userposts = Blog.query.filter_by(owner_id=userId).all()
+    '''if request.method == 'GET' and 'userId' in request.args:
+        userposts = Blog.query.filter_by(userid=userid).all()
+        return render_template('singleUser.html', title="Blogz Users", users=users, userid=userId, userposts=userposts)
+    else:'''
+    return render_template('index.html', users=users)
 
-@app.route("/blog")
+@app.route("/blog", methods=['POST', 'GET'])
 def mainblog():
     '''owner = User.query.filter_by(username=session['username']).first()'''
     posts = Blog.query.all()
+    ##allowners = Blog.query.get(posts.owner_id)
+    ##blogowners = User.query.get(allowners.owner_id)
+    ##allusernames = User.query.get(blogowners.username)
     '''posts = Blog.query.filter_by(owner=owner).all()'''
     if request.method == "GET" and 'id' in request.args:
         blogid = request.args.get("id")
         blogpost = Blog.query.get(blogid)
-        return render_template('blog_post.html', blogpost=blogpost)
+        blogowner = Blog.query.get(blogpost.owner_id)
+        owner = User.query.get(blogowner.owner_id)
+        username = User.query.get(owner.username)
+        return render_template('blog_post.html', blogpost=blogpost, owner=owner, username=username)
+    elif request.method == 'GET' and 'user' in request.args:
+        userid = request.args.get("user")
+        userposts = Blog.query.filter_by(owner_id=userid).all()
+        selecteduser = User.query.filter_by(id=userid).first()
+        return render_template('singleUser.html', title="Blogz", userposts=userposts, selecteduser=selecteduser)
     else:
-        return render_template('blog.html', title="Blogz", posts=posts)
+        for post in posts:
+            postowner = Blog.query.get(post.owner_id)
+            bpostowner = User.query.get(postowner.id)
+            postusername = User.query.get(bpostowner.username)
+            return render_template('blog.html', title="Blogz", posts=posts, postowner=postowner, bpostowner=bpostowner, postusername=postusername)
+
+'''('ratings.html', movies = get_watched_movies(logged_in_user().id))'''
 
 @app.route("/newpost", methods=['POST', 'GET'])
 def newpost():
