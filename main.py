@@ -42,7 +42,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username = username).first()
-        if user != username:
+        if user is None:
             flash('Username is incorrect.', 'error') 
         if user and user.password != password:
             flash('Password is incorrect.', 'error')
